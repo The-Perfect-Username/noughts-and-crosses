@@ -1,4 +1,5 @@
 import itertools
+from random import randint
 
 class Game:
     def __init__(self):
@@ -55,13 +56,35 @@ class Game:
         while not self.complete:
             choice = int(input("Your turn: "))
             self.board[choice] = self.player
+            self.ai_player()
+            print(self.board)
             print(self.create_grid())
-            print(self.ai_player())
 
     def ai_player(self):
-        tmp = [key for key, value in self.board.items() if value is self.player]
-        for i, j in enumerate(tmp):
-            self.ai_memory = [x for x in self.ai_memory if j not in x]
+        player_coords = [key for key, value in self.board.items() if value is self.player]
+        ai_coords = [key for key, value in self.board.items() if value is self.AI]
+
+        for i in player_coords:
+            self.ai_memory = [x for x in self.ai_memory if i not in x]
+
+        if not self.find_best_placement(ai_coords):
+            found = False
+            while not found:
+                ran = randint(1, 9)
+                if ' ' in self.board[ran]:
+                    self.board[ran] = self.AI
+                    found = True
+
+    def find_best_placement(self, ai_coords):
+        for ai in ai_coords:
+            for m in self.ai_memory:
+                if ai in m:
+                    for i in m:
+                        if self.AI is not self.board[i]:
+                            self.board[i] = self.AI
+                            print(i)
+                            return True
+        return False
 
 
 Game = Game()
