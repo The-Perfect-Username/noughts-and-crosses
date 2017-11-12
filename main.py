@@ -55,10 +55,21 @@ class Game:
     def play(self):
         while not self.complete:
             choice = int(input("Your turn: "))
-            self.board[choice] = self.player
-            self.ai_player()
-            print(self.board)
-            print(self.create_grid())
+            if self.board[choice] is ' ':
+                self.board[choice] = self.player
+                if self.check_winner(self.player):
+                    print(self.create_grid())
+                    print("Player has won the game\n")
+                    break
+                self.ai_player()
+                if self.check_winner(self.AI):
+                    print(self.create_grid())
+                    print("AI has won the game")
+                    break
+                print(self.create_grid())
+            else:
+                print("Position already taken. \n")
+
 
     def ai_player(self):
         player_coords = [key for key, value in self.board.items() if value is self.player]
@@ -82,10 +93,18 @@ class Game:
                     for i in m:
                         if self.AI is not self.board[i]:
                             self.board[i] = self.AI
-                            print(i)
                             return True
         return False
 
+    def check_winner(self, player):
+        for possible in self.combinations:
+            p = 0
+            for i in possible:
+                if self.board[i] == player:
+                    p += 1
+            if p == 3:
+                return True
+        return False
 
 Game = Game()
 Game.start()
