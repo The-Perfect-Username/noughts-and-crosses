@@ -1,5 +1,6 @@
 import itertools
 from random import randint
+import sys
 
 class Game:
     def __init__(self):
@@ -54,21 +55,27 @@ class Game:
 
     def play(self):
         while not self.complete:
-            choice = int(input("Your turn: "))
-            if self.board[choice] is ' ':
-                self.board[choice] = self.player
-                if self.check_winner(self.player):
+            try:
+                choice = int(input("Your turn: "))
+                if self.board[choice] is ' ':
+                    self.board[choice] = self.player
+                    if self.check_winner(self.player):
+                        print(self.create_grid())
+                        print("Player has won the game\n")
+                        break
+                    self.ai_player()
+                    if self.check_winner(self.AI):
+                        print(self.create_grid())
+                        print("AI has won the game")
+                        break
                     print(self.create_grid())
-                    print("Player has won the game\n")
-                    break
-                self.ai_player()
-                if self.check_winner(self.AI):
-                    print(self.create_grid())
-                    print("AI has won the game")
-                    break
-                print(self.create_grid())
-            else:
-                print("Position already taken. \n")
+                else:
+                    print("Position already taken. \n")
+            except KeyboardInterrupt:
+                print("Exiting game")
+                sys.exit()
+            except:
+                print("Please choose a number between 1 and 9")
 
 
     def ai_player(self):
