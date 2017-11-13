@@ -9,7 +9,7 @@ class Game:
         self.AI = None
         self.characters = ['X', 'O']
         self.complete = False
-        self.combinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 6], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+        self.combinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
         self.ai_memory = self.combinations
         self.player_memory = []
 
@@ -118,8 +118,8 @@ class Game:
             for i in c:
                 if player is self.board[i]:
                     count += 1
-                    if count == 2:
-                        return c
+            if count == 2:
+                return c
         return False
 
     def check_winner(self, player):
