@@ -75,8 +75,8 @@ class Game:
             except KeyboardInterrupt:
                 print("Exiting game")
                 sys.exit()
-            except Exception as e:
-                print(e)
+            except:
+                print("Please choose a number between 1 and 9")
 
 
     def ai_player(self):
