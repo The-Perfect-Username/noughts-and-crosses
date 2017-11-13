@@ -11,6 +11,7 @@ class Game:
         self.complete = False
         self.combinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 6], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
         self.ai_memory = self.combinations
+        self.player_memory = []
 
     def start(self):
         print("Choose a number between 1 and 9 to place your character on the board; left to right, top down. \n")
@@ -74,8 +75,8 @@ class Game:
             except KeyboardInterrupt:
                 print("Exiting game")
                 sys.exit()
-            except:
-                print("Please choose a number between 1 and 9")
+            except Exception as e:
+                print(e)
 
 
     def ai_player(self):
@@ -84,6 +85,7 @@ class Game:
 
         for i in player_coords:
             self.ai_memory = [x for x in self.ai_memory if i not in x]
+            self.player_memory = [x for x in self.combinations if i in x]
 
         if not self.find_best_placement(ai_coords):
             found = False
@@ -94,13 +96,30 @@ class Game:
                     found = True
 
     def find_best_placement(self, ai_coords):
-        for ai in ai_coords:
-            for m in self.ai_memory:
-                if ai in m:
-                    for i in m:
-                        if self.AI is not self.board[i]:
-                            self.board[i] = self.AI
-                            return True
+        player_about_to_win = self.is_about_to_win(self.player, self.player_memory)
+        if player_about_to_win and not self.is_about_to_win(self.AI, self.ai_memory):
+            for i in player_about_to_win:
+                if self.board[i] is ' ':
+                    self.board[i] = self.AI
+                    return True
+        else:
+            for ai in ai_coords:
+                for m in self.ai_memory:
+                    if ai in m:
+                        for i in m:
+                            if self.AI is not self.board[i]:
+                                self.board[i] = self.AI
+                                return True
+        return False
+
+    def is_about_to_win(self, player, coords):
+        for c in coords:
+            count = 0
+            for i in c:
+                if player is self.board[i]:
+                    count += 1
+                    if count == 2:
+                        return c
         return False
 
     def check_winner(self, player):
