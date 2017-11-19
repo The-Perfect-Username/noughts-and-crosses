@@ -46,8 +46,8 @@ class Game:
     def choose_character(self):
         char = None
         while True:
-            char = input("Choose a character (X or O): ")
-            if char.upper() in self.characters:
+            char = input("Choose a character (X or O): ").upper()
+            if char in self.characters:
                 self.player = char
                 for c in self.characters:
                     if self.player != c:
